@@ -9,6 +9,7 @@ import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { NoUserFoundError, WrongPasswordError } from 'src/errors/ResourceError';
 import { TokenPayloadDto } from './dto/token-payload.dto';
+import { TokenType } from 'src/types/enum/token-type';
 
 @Injectable()
 export class AuthService {
@@ -48,7 +49,7 @@ export class AuthService {
   public async login(body: UserLoginDto): Promise<AuthLogin> {
     const { username, email, password } = body;
 
-    const user: User = await this.validateUser({
+    const user: User | null = await this.validateUser({
       username: username,
       email: email,
     });
@@ -67,11 +68,14 @@ export class AuthService {
     }
 
     const token = new TokenPayloadDto();
-    token.expiresIn = 86400;
-
-    // INI DILANJUT BOLOOO
+    token.accessToken = await this.helper.generateToken({
+      id: JSON.stringify(user._id),
+      type: TokenType.ACCESS_TOKEN,
+    });
 
     const loginPayload = new AuthLogin();
+    loginPayload.ownerUser = user.username;
+    loginPayload.accessToken = token.accessToken;
 
     return loginPayload;
   }

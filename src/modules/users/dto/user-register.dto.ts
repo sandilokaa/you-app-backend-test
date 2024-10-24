@@ -5,15 +5,15 @@ export class RegisterUserDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsEmail()
-  readonly email: string;
+  email: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  readonly username: string;
+  username: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  readonly password: string;
+  password: string;
 }

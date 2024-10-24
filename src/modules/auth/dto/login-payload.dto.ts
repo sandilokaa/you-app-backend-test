@@ -5,11 +5,5 @@ export class AuthLogin {
   ownerUser: string;
 
   @ApiProperty()
-  expiredIn: number;
-
-  @ApiProperty()
   accessToken: string;
-
-  @ApiProperty()
-  lastLoggedInAt: Date;
 }
